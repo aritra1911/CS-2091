@@ -1,0 +1,5 @@
+1. Write a C program to swap the two numbers using call by reference
+2. Write a C program to find whether a number is palindrome or not
+3. Write a C program to find whether the number is armstrong number or not.
+4. Write a C program to find whether the number is perfect number or not.
+4. Write a C program to create a structure of student to store rollno, name and marks and also find the avg. marks of the class where no. of students present in class is 60.
