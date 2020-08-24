@@ -61,7 +61,7 @@ int** input_triplet_form(int m, int n) {
 
 int** transpose_triplet(int** triplet_form) {
     int** transposed_triplet = malloc((triplet_form[0][2] + 1) * sizeof *transposed_triplet);
-    
+
     for (int i = 0; i < triplet_form[0][2] + 1; i++) {
         transposed_triplet[i] = malloc(3 * sizeof **transposed_triplet);
         transposed_triplet[i][0] = triplet_form[i][1];
@@ -107,11 +107,11 @@ int** add_triplets(int** triplet1, int** triplet2) {
 
 int** multiply_triplets(int** triplet1, int** triplet2) {
     int flag;
-    int** temp_triplet = malloc((triplet1[0][1]*triplet2[0][0] + 1) * sizeof *temp_triplet);
+    int** temp_triplet = malloc((triplet1[0][0]*triplet2[0][1] + 1) * sizeof *temp_triplet);
 
     temp_triplet[0] = malloc(3 * sizeof **temp_triplet);
-    temp_triplet[0][0] = triplet1[0][1];
-    temp_triplet[0][1] = triplet2[0][0];
+    temp_triplet[0][0] = triplet1[0][0];
+    temp_triplet[0][1] = triplet2[0][1];
     temp_triplet[0][2] = 0;
 
     for (int i = 1; i < triplet1[0][2] + 1; i++)
@@ -137,11 +137,17 @@ int** multiply_triplets(int** triplet1, int** triplet2) {
     // make a fresh triplet and copy over only the non-zero entries
     int** product_triplet = malloc((temp_triplet[0][2] + 1) * sizeof *product_triplet);
 
-    for (int i = 0; i < temp_triplet[0][2] + 1; i++)
-        if (i == 0 || temp_triplet[i][2] != 0) {
-            product_triplet[i] = malloc(3 * sizeof **product_triplet);
+    product_triplet[0] = malloc(3 * sizeof **product_triplet);
+    product_triplet[0][0] = temp_triplet[0][0];
+    product_triplet[0][1] = temp_triplet[0][1];
+    product_triplet[0][2] = 0;
+
+    for (int i = 1; i < temp_triplet[0][2] + 1; i++)
+        if (temp_triplet[i][2] != 0) {
+            int index = ++product_triplet[0][2];
+            product_triplet[index] = malloc(3 * sizeof **product_triplet);
             for (int j = 0; j < 3; j++)
-                product_triplet[i][j] = temp_triplet[i][j];
+                product_triplet[index][j] = temp_triplet[i][j];
         }
 
     free(temp_triplet);
