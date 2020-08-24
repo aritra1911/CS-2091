@@ -1,11 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void) {
-    int poly1[10], poly2[10], result[10];
+    int *poly1, *poly2, *result;
     int order_poly1, order_poly2, max_order;
 
     printf("Enter order of polynomial 1: ");
     scanf("%d", &order_poly1);
+
+    poly1 = malloc((order_poly1 + 1) * sizeof *poly1);
 
     for (int i=0; i<=order_poly1; i++) {
         printf("Enter coefficient of order %d term: ", i);
@@ -17,12 +20,15 @@ int main(void) {
     printf("Enter order of polynomial 2: ");
     scanf("%d", &order_poly2);
 
+    poly2 = malloc((order_poly2 + 1) * sizeof *poly2);
+
     for (int i=0; i<=order_poly2; i++) {
         printf("Enter coefficient of order %d term: ", i);
         scanf("%d", &poly2[i]);
     }
 
      max_order = (order_poly1 > order_poly2) ? order_poly1 : order_poly2;
+     result = malloc((max_order + 1) * sizeof *result);
 
     // copy the bigger polynomial to result and then
     // add the coefficients of smaller polynomial to it
@@ -40,11 +46,16 @@ int main(void) {
             result[i] += poly1[i];
     }
 
+    free(poly1);
+    free(poly2);
+
     putchar('\n');
 
     printf("Result : %dx^%d", result[max_order], max_order);
     for (int i=max_order-1; i>=0; i--)
         printf(" + %dx^%d", result[i], i);
+
+    free(result);
 
     putchar('\n');
 

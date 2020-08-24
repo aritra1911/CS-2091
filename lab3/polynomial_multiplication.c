@@ -2,11 +2,13 @@
 #include <stdlib.h>
 
 int main(void) {
-    int poly1[10], poly2[10], *result;
+    int *poly1, *poly2, *result;
     int order_poly1, order_poly2, max_order;
 
     printf("Enter order of polynomial 1: ");
     scanf("%d", &order_poly1);
+
+    poly1 = malloc((order_poly1 + 1) * sizeof *poly1);
 
     for (int i=0; i<=order_poly1; i++) {
         printf("Enter coefficient of order %d term: ", i);
@@ -18,17 +20,22 @@ int main(void) {
     printf("Enter order of polynomial 2: ");
     scanf("%d", &order_poly2);
 
+    poly2 = malloc((order_poly2 + 1) * sizeof *poly2);
+
     for (int i=0; i<=order_poly2; i++) {
         printf("Enter coefficient of order %d term: ", i);
         scanf("%d", &poly2[i]);
     }
 
     max_order = order_poly1 + order_poly2;
-    result = calloc(max_order + 1, sizeof *result);
+    result = calloc(max_order + 1, sizeof *result);  // allocate and initialize to 0s
 
     for (int i=0; i<=order_poly1; i++)
         for (int j=0; j<=order_poly2; j++)
             result[i+j] += poly1[i] * poly2[j];
+
+    free(poly1);
+    free(poly2);
 
     putchar('\n');
 
