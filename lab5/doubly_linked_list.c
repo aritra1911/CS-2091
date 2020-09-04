@@ -35,17 +35,30 @@ void insert_beg(Node** head, int new_data) {
 }
 
 void insert_at(Node** head, int index, int new_data) {
-    if (index == 0) {
+    if (index == 0 || *head == NULL) {
         insert_beg(head, new_data);
         return;
     }
 
-    Node* new_node = malloc(sizeof *new_node);
+    int flag = 0;
     Node* node = *head;
-
-    for (int i = 0; i < index; i++)
+    for (int i = 0; i < index; i++) {
+        if (node->next == NULL) {
+            flag = 1;
+            break;
+        }
         node = node->next;
+    }
 
+    if (flag) {
+        printf("Warning: Specified index is beyond the scope of the list\n");
+        printf("Would you like to append this node instead? (Y/n): ");
+        if (tolower(getchar()) == 'y')
+            append(head, new_data);
+        return;
+    }
+
+    Node* new_node = malloc(sizeof *new_node);
     new_node->data = new_data;
 
     node->prev->next = new_node;
@@ -57,6 +70,96 @@ void insert_at(Node** head, int index, int new_data) {
 void print_traversal(Node* head) {
     for (Node* node = head; node != NULL; node = node->next)
         printf("%d\n", node->data);
+}
+
+void print_reverse_traversal(Node* head) {
+    if (head == NULL) return;
+
+    Node* ptr;
+    for (ptr = head; ptr->next != NULL; ptr = ptr->next);
+
+    for(; ptr != NULL; ptr = ptr->prev)
+        printf("%d\n", ptr->data);
+}
+
+int is_empty(Node* head) {
+    return head == NULL;
+}
+
+void delete_at(Node** head, int index) {
+    if (*head == NULL) {
+        printf("Error: The list is empty!\n");
+        return;
+    }
+
+    if (index == 0) {
+        Node* temp = *head;
+        *head = *head->next;
+        *head->prev = NULL;
+        free(temp);
+    }
+
+    Node* ptr = *head;
+    int flag = 0;
+    for (int i = 0; i < index; i++) {
+        if (ptr->next == NULL) {
+            flag = 1;
+            break;
+        }
+        ptr = ptr->next;
+    }
+
+    if (flag) {
+        printf("Error: Cannot delete since specified index is beyond the scope of the list\n");
+        return;
+    }
+
+    ptr->prev->next = ptr->next;
+    ptr->next->prev = ptr->prev;
+    free(ptr);
+}
+
+void delete_key(Node** head, int key) {
+    if (*head == NULL)
+        return;
+
+    if ((*head)->data == key) {
+        (*head)->next->prev = NULL;
+        Node* temp = *head;
+        *head = *head->next;
+        free(temp);
+    }
+
+    Node* ptr;
+    for (ptr = *head; ptr != NULL; ptr = ptr->next)
+        if (ptr->data == key) {
+            Node* temp = ptr->prev;
+            ptr->prev->next = ptr->next;
+            if (ptr->next != NULL)
+                ptr->next->prev = ptr->prev;
+            free(ptr);
+            ptr = temp;
+        }
+}
+
+int count_nodes(Node* head) {
+    int nodes = 0;
+    for (Node* ptr = head; ptr != NULL; ptr = ptr->next)
+        nodes++;
+
+    return nodes;
+}
+
+int search(Node* head, int search_element) {
+    int index = 0;
+    for (Node* ptr = head; ptr != NULL; ptr = ptr->next) {
+        if (ptr->data == searcg_element)
+            return index;
+
+        index++;
+    }
+
+    return -1;
 }
 
 // 1. Insert at begining in circular doubly linked list
