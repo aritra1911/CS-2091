@@ -3,4 +3,6 @@ typedef struct _Node {
     struct _Node* next;
 } Node;
 
-
+void append(Node**, int);
+void reverse(Node**);
+void print_traversal(Node*);

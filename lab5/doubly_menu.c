@@ -5,18 +5,20 @@
 
 int main(void) {
     Node* head = NULL;
-    int data;
+    int data, elem, index, key;
+    char ch;
 
     do {
         printf("Enter data: ");
         scanf("%d", &data);
         getchar();
-        append(head, data);
+        append(&head, data);
         printf("Add more data? (Y/n): ");
-    } while (tolower(getchar()) == 'y');
+        ch = tolower(getchar());
+        getchar();
+    } while (ch == 'y');
 
     while (1) {
-        // choose
         printf("\nWHAT DO YOU WANNA DO WITH THIS LIST?\n");
         printf("a) Traverse the list forward\n");
         printf("b) Traverse the list backward\n");
@@ -29,7 +31,9 @@ int main(void) {
         printf("i) Quit application\n");
 
         printf("\nYour choice: ");
-        switch (tolower(getchar())) {
+        ch = tolower(getchar());
+        getchar();
+        switch (ch) {
             case 'a':
                 print_traversal(head);
                 break;
@@ -46,7 +50,6 @@ int main(void) {
                 break;
 
             case 'd':
-                int index, data;
                 printf("Enter index where you want to add the node: ");
                 scanf("%d", &index);
                 printf("Enter data: ");
@@ -56,7 +59,6 @@ int main(void) {
                 break;
 
             case 'e':
-                int index;
                 printf("Enter index of node to be deleted: ");
                 scanf("%d", &index);
                 getchar();
@@ -64,12 +66,17 @@ int main(void) {
                 break;
 
             case 'f':
+                printf("Enter key to delete: ");
+                scanf("%d", &key);
+                getchar();
+                delete_key(&head, key);
+                break;
+
             case 'g':
-                printf("Count : %d", count_nodes(head));
+                printf("Count : %d\n", count_nodes(head));
                 break;
 
             case 'h':
-                int elem, index;
                 printf("Enter element to be searched: ");
                 scanf("%d", &elem);
                 getchar();

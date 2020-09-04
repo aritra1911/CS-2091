@@ -52,9 +52,8 @@ void insert_at(Node** head, int index, int new_data) {
 
     if (flag) {
         printf("Warning: Specified index is beyond the scope of the list\n");
-        printf("Would you like to append this node instead? (Y/n): ");
-        if (tolower(getchar()) == 'y')
-            append(head, new_data);
+        printf("Appending instead\n");
+        append(head, new_data);
         return;
     }
 
@@ -68,12 +67,20 @@ void insert_at(Node** head, int index, int new_data) {
 }
 
 void print_traversal(Node* head) {
+    if (head == NULL) {
+        printf("List is empty!\n");
+        return;
+    }
+
     for (Node* node = head; node != NULL; node = node->next)
         printf("%d\n", node->data);
 }
 
 void print_reverse_traversal(Node* head) {
-    if (head == NULL) return;
+    if (head == NULL) {
+        printf("List is empty!\n");
+        return;
+    }
 
     Node* ptr;
     for (ptr = head; ptr->next != NULL; ptr = ptr->next);
@@ -94,9 +101,11 @@ void delete_at(Node** head, int index) {
 
     if (index == 0) {
         Node* temp = *head;
-        *head = *head->next;
-        *head->prev = NULL;
+        *head = (*head)->next;
+        if (*head != NULL)
+            (*head)->prev = NULL;
         free(temp);
+        return;
     }
 
     Node* ptr = *head;
@@ -115,20 +124,22 @@ void delete_at(Node** head, int index) {
     }
 
     ptr->prev->next = ptr->next;
-    ptr->next->prev = ptr->prev;
+    if (ptr->next != NULL)
+        ptr->next->prev = ptr->prev;
     free(ptr);
 }
 
 void delete_key(Node** head, int key) {
-    if (*head == NULL)
-        return;
-
-    if ((*head)->data == key) {
-        (*head)->next->prev = NULL;
+    while ((*head) != NULL && (*head)->data == key) {
+        if ((*head)->next != NULL)
+            (*head)->next->prev = NULL;
         Node* temp = *head;
-        *head = *head->next;
+        *head = (*head)->next;
         free(temp);
     }
+
+    if (*head == NULL)
+        return;
 
     Node* ptr;
     for (ptr = *head; ptr != NULL; ptr = ptr->next)
@@ -153,13 +164,31 @@ int count_nodes(Node* head) {
 int search(Node* head, int search_element) {
     int index = 0;
     for (Node* ptr = head; ptr != NULL; ptr = ptr->next) {
-        if (ptr->data == searcg_element)
+        if (ptr->data == search_element)
             return index;
 
         index++;
     }
 
     return -1;
+}
+
+void remove_duplicates(Node* head) {
+    if (head == NULL)
+        return;
+
+    for (Node* ptr = head; ptr != NULL && ptr->next != NULL; ptr = ptr->next) {
+        for (Node* qtr = ptr->next; qtr != NULL; qtr = qtr->next) {
+            if (qtr->data == ptr->data) {
+                Node* temp = qtr->prev;
+                qtr->prev->next = qtr->next;
+                if (qtr->next != NULL)
+                    qtr->next->prev = qtr->prev;
+                free(qtr);
+                qtr = temp;
+            }
+        }
+    }
 }
 
 // 1. Insert at begining in circular doubly linked list
@@ -207,18 +236,4 @@ void circular_print_traversal(Node* head) {
     printf("%d\n", head->data);
     for (Node* node = head->next; node != head; node = node->next)
         printf("%d\n", node->data);
-}
-
-int main(void) {
-    Node* head=NULL;
-    for (int i = 0; i < 20; i++)
-        append(&head, i);
-
-    insert_at(&head, 20, 421);
-
-    print_traversal(head);
-
-    free(head);
-
-    return 0;
 }

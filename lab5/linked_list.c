@@ -22,7 +22,8 @@ void append(Node** head, int new_data) {
         return;
     }
 
-    for (Node* node = *head; node->next != NULL; node = node->next);
+    Node* node;
+    for (node = *head; node->next != NULL; node = node->next);
 
     node->next = new_node;
 }
@@ -32,7 +33,7 @@ void delete_first(Node** head) {
     if (*head == NULL) return;
 
     Node* first_node = *head;
-    *head = *head->next;
+    *head = (*head)->next;
 
     free(first_node);
 }
@@ -41,9 +42,9 @@ void delete_last(Node** head) {
     // if list is empty, do nothing
     if (*head == NULL) return;
 
-    Node* prev_node = NULL;
+    Node *prev_node = NULL, *node;
 
-    for (Node* node = *head; node->next != NULL; node = node->next)
+    for (node = *head; node->next != NULL; node = node->next)
         prev_node = node;
 
     if (prev_node == NULL)
@@ -56,14 +57,14 @@ void delete_last(Node** head) {
 }
 
 void insert_middle(Node** head, int new_data) {
-    if (*head == NULL || *head->next == NULL)
+    if (*head == NULL || (*head)->next == NULL)
         // not a job for this function
         append(head, new_data);
 
     Node* half_ptr = *head;
 
-    for (Node* node = *head->next; node != NULL && node->next != NULL; node = node->next->next)
-        half_ptr = half-ptr->next;
+    for (Node* node = (*head)->next; node != NULL && node->next != NULL; node = node->next->next)
+        half_ptr = half_ptr->next;
 
     Node* new_node = malloc(sizeof *new_node);
     new_node->data = new_data;
@@ -80,12 +81,24 @@ void delete_middle(Node* head) {
 
     for (Node* node = head->next; node != NULL && node->next != NULL; node = node->next->next) {
         prev_half_ptr = half_ptr;
-        half_ptr = half-ptr->next;
+        half_ptr = half_ptr->next;
     }
 
     Node* next_node = half_ptr->next;
     prev_half_ptr->next = next_node;
     free(half_ptr);
+}
+
+void reverse(Node** head) {
+    Node *ptr = *head, *prev = NULL;
+    while (ptr != NULL) {
+        Node* temp = ptr->next;
+        ptr->next = prev;
+        prev = ptr;
+        ptr = temp;
+    }
+
+    *head = prev;
 }
 
 void print_traversal(Node* head) {
