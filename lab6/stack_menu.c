@@ -34,14 +34,15 @@ int main(void) {
                 printf("Enter data to push: ");
                 scanf("%d", &data);
                 getchar();
-                push(&top, data);
+                if (!push(&top, data))
+                    printf("Overflow!\n");
                 break;
 
             case 'd':
-                if ((data = pop(&top)) != -1)
+                if ((data = pop(&top)))
                     printf("Popped : %d\n", data);
                 else
-                    printf("Unable to pop - stack is empty!\n");
+                    printf("Underflow!\n");
                 break;
 
             default:
