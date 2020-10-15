@@ -46,7 +46,7 @@ Term* poly_add(Term* poly1, Term* poly2) {
             new_term->coeff = poly1->coeff;
             new_term->exp = poly1->exp;
             temp = poly1;
-            poly2 = poly1->next;
+            poly1 = poly1->next;
             free(poly1);
         }
 
