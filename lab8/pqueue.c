@@ -1,19 +1,19 @@
 #include <stdio.h>
-#include "deque.h"
+#include "priority_queue.h"
 
 int get_data(void);
-void show_deque(Node*, Node*);
+int get_priority(void);
+void show_queue(Node*, Node*);
 
 int main(void) {
     Node *front=NULL, *rear=NULL;
     int ch, x;
 
     while (1) {
-        printf("1) Enqueue rear\n");
-        printf("2) Enqueue front\n");
-        printf("3) Dequeue\n");
-        printf("4) Show deque\n");
-        printf("5) Exit\n");
+        printf("1) Enqueue\n");
+        printf("2) Dequeue\n");
+        printf("3) Show queue\n");
+        printf("4) Exit\n");
 
         printf("\nYour Choice: ");
         ch = getchar();
@@ -21,23 +21,19 @@ int main(void) {
 
         switch (ch) {
             case '1':
-                enqueue_rear(get_data(), &front, &rear);
+                enqueue(get_data(), get_priority(), &front, &rear);
                 break;
 
             case '2':
-                enqueue_front(get_data(), &front, &rear);
-                break;
-
-            case '3':
-                if ((x = dequeue_front(&front, &rear)) == -999) {
+                if ((x = dequeue(&front, &rear)) == -999) {
                     printf("No element to dequeue!\n");
                     break;
                 }
                 printf("Dequeued: %d\n", x);
                 break;
 
-            case '4':
-                show_deque(front, rear);
+            case '3':
+                show_queue(front, rear);
                 break;
 
             default:
@@ -55,7 +51,15 @@ int get_data(void) {
     return d;
 }
 
-void show_deque(Node* front, Node* rear) {
+int get_priority(void) {
+    int d;
+    printf("Enter priority: ");
+    scanf("%d", &d);
+    getchar();
+    return d;
+}
+
+void show_queue(Node* front, Node* rear) {
     if (!front) {
         printf("No element to show\n");
         return;

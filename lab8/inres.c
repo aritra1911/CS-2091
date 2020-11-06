@@ -60,10 +60,14 @@ int get_data(void) {
 }
 
 void show_deque(Node* front, Node* rear) {
-    for (Node* ptr=front; ptr!=NULL; ptr=ptr->next) {
-        printf("%d", ptr->data);
-        if (ptr->next != NULL)
-            printf(" -> ");
+    if (!front) {
+        printf("No element to show\n");
+        return;
     }
-    printf("\n");
+
+    for (Node* ptr=front; ptr!=rear; ptr=ptr->next) {
+        printf("%d", ptr->data);
+        printf(" -> ");
+    }
+    printf("%d\n", rear->data);
 }
