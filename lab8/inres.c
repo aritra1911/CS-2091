@@ -9,9 +9,9 @@ int main(void) {
     int ch, x;
 
     while (1) {
-        printf("1) Enqueue rear\n");
-        printf("2) Enqueue front\n");
-        printf("3) Dequeue\n");
+        printf("1) Enqueue\n");
+        printf("2) Dequeue front\n");
+        printf("3) Dequeue rear\n");
         printf("4) Show deque\n");
         printf("5) Exit\n");
 
@@ -25,11 +25,15 @@ int main(void) {
                 break;
 
             case '2':
-                enqueue_front(get_data(), &front, &rear);
+                if ((x = dequeue_front(&front, &rear)) == -999) {
+                    printf("No element to dequeue!\n");
+                    break;
+                }
+                printf("Dequeued: %d\n", x);
                 break;
 
             case '3':
-                if ((x = dequeue_front(&front, &rear)) == -999) {
+                if ((x = dequeue_rear(&front, &rear)) == -999) {
                     printf("No element to dequeue!\n");
                     break;
                 }
