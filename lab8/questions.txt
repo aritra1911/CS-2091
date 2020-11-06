@@ -1,0 +1,5 @@
+Write a C program to implement output restricted double ended queue
+
+Write a C program to implement input restricted double ended queue
+
+Wite a C program to implement priority queue using linked list
